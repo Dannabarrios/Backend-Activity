@@ -1,44 +1,58 @@
 package com.hospital.backend.controller;
 
+import com.hospital.backend.dto.AppointmentDTO;
+import com.hospital.backend.mapper.AppointmentMapper;
 import com.hospital.backend.model.Appointment;
 import com.hospital.backend.service.AppointmentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/appointments")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@Tag(name = "Appointments", description = "Gestión de citas médicas")
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
+    private final AppointmentMapper appointmentMapper;
 
     @PostMapping
-    public ResponseEntity<Appointment> create(@RequestBody Appointment appointment) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(appointmentService.create(appointment));
+    @Operation(summary = "Crear cita médica")
+    public ResponseEntity<AppointmentDTO> create(@RequestBody AppointmentDTO dto) {
+        Appointment appointment = appointmentMapper.toModel(dto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(appointmentMapper.toDTO(appointmentService.create(appointment)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Appointment> update(@PathVariable Long id, @RequestBody Appointment appointment) {
-        return ResponseEntity.ok(appointmentService.update(id, appointment));
+    @Operation(summary = "Actualizar cita médica")
+    public ResponseEntity<AppointmentDTO> update(@PathVariable Long id, @RequestBody AppointmentDTO dto) {
+        return ResponseEntity.ok(appointmentMapper.toDTO(appointmentService.update(id, appointmentMapper.toModel(dto))));
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar cita médica")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         appointmentService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Appointment> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(appointmentService.findById(id));
+    @Operation(summary = "Obtener cita por ID")
+    public ResponseEntity<AppointmentDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(appointmentMapper.toDTO(appointmentService.findById(id)));
     }
 
     @GetMapping
-    public ResponseEntity<List<Appointment>> findAll() {
-        return ResponseEntity.ok(appointmentService.findAll());
+    @Operation(summary = "Obtener todas las citas")
+    public ResponseEntity<List<AppointmentDTO>> findAll() {
+        return ResponseEntity.ok(appointmentService.findAll()
+                .stream().map(appointmentMapper::toDTO).collect(Collectors.toList()));
     }
 }
