@@ -6,6 +6,7 @@ import com.hospital.backend.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient update(Long id, Patient patient) {
+    public Patient update(UUID id, Patient patient) {
         Patient existing = findById(id);
         existing.setName(patient.getName());
         existing.setEmail(patient.getEmail());
@@ -29,12 +30,12 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         patientRepository.deleteById(id);
     }
 
     @Override
-    public Patient findById(Long id) {
+    public Patient findById(UUID id) {
         return patientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
     }
