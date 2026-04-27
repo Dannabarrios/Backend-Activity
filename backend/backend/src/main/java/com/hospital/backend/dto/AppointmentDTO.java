@@ -1,13 +1,14 @@
 package com.hospital.backend.dto;
 
 import lombok.Data;
+import java.util.UUID;
 
 @Data
 public class AppointmentDTO {
-    private Long id;
-    private Long patientId;
+    private UUID id;
+    private UUID patientId;
     private String patientName;
-    private Long doctorId;
+    private UUID doctorId;
     private String doctorName;
     private String appointmentDate;
     private String status;

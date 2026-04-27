@@ -3,6 +3,7 @@ package com.hospital.backend.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -10,8 +11,8 @@ import java.time.LocalDateTime;
 public class Appointment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
@@ -25,5 +26,5 @@ public class Appointment {
     private LocalDateTime appointmentDate;
 
     @Column(nullable = false)
-    private String status; // SCHEDULED, COMPLETED, CANCELLED
+    private String status;
 }

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,20 +33,20 @@ public class AppointmentController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar cita médica")
-    public ResponseEntity<AppointmentDTO> update(@PathVariable Long id, @RequestBody AppointmentDTO dto) {
+    public ResponseEntity<AppointmentDTO> update(@PathVariable UUID id, @RequestBody AppointmentDTO dto) {
         return ResponseEntity.ok(appointmentMapper.toDTO(appointmentService.update(id, appointmentMapper.toModel(dto))));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar cita médica")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         appointmentService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtener cita por ID")
-    public ResponseEntity<AppointmentDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<AppointmentDTO> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(appointmentMapper.toDTO(appointmentService.findById(id)));
     }
 

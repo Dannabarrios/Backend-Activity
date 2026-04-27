@@ -6,6 +6,7 @@ import com.hospital.backend.service.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Appointment update(Long id, Appointment appointment) {
+    public Appointment update(UUID id, Appointment appointment) {
         Appointment existing = findById(id);
         existing.setPatient(appointment.getPatient());
         existing.setDoctor(appointment.getDoctor());
@@ -29,12 +30,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         appointmentRepository.deleteById(id);
     }
 
     @Override
-    public Appointment findById(Long id) {
+    public Appointment findById(UUID id) {
         return appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + id));
     }
